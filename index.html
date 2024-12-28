@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAKSHAM</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .content {
+            position: relative;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00ff87, #60efff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00ff87;
+        }
+
+        .project-description {
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        #interaction-tips {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div class="content">
+        <header>
+            <div>
+                <h1 class="title">THIS DIS SAKSHAM</h1>
+                <p class="subtitle">CrystamMethAI            fuks browser</p>
+                <div class="scroll-indicator">↓</div>
+            </div>
+        </header>
+
+        <section class="projects">
+            <div class="project-card">
+                <h3 class="project-title">METH</h3>
+                <p class="project-description">Exploring cutting-edge AI technologies and their practical applications on darkweb and everywhere</p>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">FUKS Browser</h3>
+                <p class="project-description">Pushing the boundaries of what's possible in modern browsers</p>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">Research & Insights</h3>
+                <p class="project-description">will share when i think it is worth sharing btw updates will be there on instagram and all socials i guess</p>
+            </div>
+        </section>
+    </div>
+
+    <div id="interaction-tips">
+        Move mouse to control particles | Click to create waves | Scroll to zoom
+    </div>
+
+    <script>
+        // Interactive background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Create particles
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const velocities = [];
+        const particleCount = 1000;
+
+        for (let i = 0; i < particleCount; i++) {
+            vertices.push(
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000,
+                Math.random() * 2000 - 1000
+            );
+            velocities.push(
+                Math.random() * 2 - 1,
+                Math.random() * 2 - 1,
+                Math.random() * 2 - 1
+            );
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 3,
+            color: 0x00ff87,
+            transparent: true,
+            opacity: 0.6
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        camera.position.z = 1000;
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 2;
+            mouseY = (event.clientY - window.innerHeight / 2) * 2;
+        });
+
+        // Click interaction
+        document.addEventListener('click', (event) => {
+            const positions = particles.geometry.attributes.position.array;
+            const centerX = (event.clientX / window.innerWidth) * 2 - 1;
+            const centerY = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            for (let i = 0; i < positions.length; i += 3) {
+                velocities[i] += (Math.random() - 0.5) * 10;
+                velocities[i + 1] += (Math.random() - 0.5) * 10;
+                velocities[i + 2] += (Math.random() - 0.5) * 10;
+            }
+        });
+
+        // Scroll interaction
+        let targetZoom = 1000;
+        document.addEventListener('wheel', (event) => {
+            targetZoom = Math.max(500, Math.min(1500, targetZoom + event.deltaY * 0.5));
+        });
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Smooth camera movement
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+            camera.position.z += (targetZoom - camera.position.z) * 0.05;
+
+            // Update particle positions
+            const positions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < positions.length; i += 3) {
+                // Apply velocity
+                positions[i] += velocities[i] * 0.1;
+                positions[i + 1] += velocities[i + 1] * 0.1;
+                positions[i + 2] += velocities[i + 2] * 0.1;
+
+                // Apply damping
+                velocities[i] *= 0.99;
+                velocities[i + 1] *= 0.99;
+                velocities[i + 2] *= 0.99;
+
+                // Keep particles within bounds
+                if (Math.abs(positions[i]) > 1000) {
+                    positions[i] *= -0.95;
+                    velocities[i] *= -0.95;
+                }
+                if (Math.abs(positions[i + 1]) > 1000) {
+                    positions[i + 1] *= -0.95;
+                    velocities[i + 1] *= -0.95;
+                }
+                if (Math.abs(positions[i + 2]) > 1000) {
+                    positions[i + 2] *= -0.95;
+                    velocities[i + 2] *= -0.95;
+                }
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            // Rotate based on mouse position
+            particles.rotation.x += targetY * 0.00001;
+            particles.rotation.y += targetX * 0.00001;
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
+        animate();
+
+        // Interactive cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const rotateY = ((x - rect.width / 2) / rect.width) * 10;
+                const rotateX = ((y - rect.height / 2) / rect.height) * -10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateZ(0px)';
+            });
+        });
+    </script>
+</body>
+</html>
