@@ -3,314 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAKSHAM</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <title>DIS IS SAKSHAM</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #0a0a0a;
+            background-color: #000;
             color: #fff;
-            overflow-x: hidden;
-            cursor: crosshair;
+            line-height: 1.6;
         }
 
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-        }
-
-        .content {
-            position: relative;
-            padding: 2rem;
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
-        header {
-            min-height: 100vh;
+        /* Hero Section */
+        .hero {
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(45deg, rgba(0,0,30,0.5), rgba(30,0,30,0.5));
             text-align: center;
-            position: relative;
         }
 
-        .title {
+        .hero h1 {
             font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, #00ff87, #60efff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
         }
 
-        .subtitle {
+        .hero p {
             font-size: 1.5rem;
-            color: #888;
-            margin-bottom: 2rem;
+            color: #ccc;
         }
 
+        /* Projects Section */
         .projects {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            padding: 4rem 0;
         }
 
         .project-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            background: #111;
+            border-radius: 10px;
             padding: 2rem;
             transition: transform 0.3s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .project-card:hover {
             transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.08);
         }
 
-        .project-title {
+        .project-card h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: #00ff87;
         }
 
-        .project-description {
-            color: #888;
-            line-height: 1.6;
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-
-        #interaction-tips {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
+        .tech-tag {
+            background: #222;
+            padding: 0.3rem 0.8rem;
             border-radius: 20px;
             font-size: 0.9rem;
-            color: #888;
+            color: #ccc;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
-            }
+        /* Skills Section */
+        .skills {
+            padding: 100px 0;
+            background: #111;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: #000;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .skill-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Social Links */
+        .social {
+            padding: 100px 0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .social-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 1rem 2rem;
+            border: 2px solid #333;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #333;
+            transform: translateY(-3px);
         }
 
         @media (max-width: 768px) {
-            .title {
+            .hero h1 {
                 font-size: 2.5rem;
             }
-            .subtitle {
+            .hero p {
                 font-size: 1.2rem;
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            .social-links {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
-    <div id="canvas-container"></div>
-    
-    <div class="content">
-        <header>
-            <div>
-                <h1 class="title">DIS IS SAKSHAM</h1>
-                <p class="subtitle">CrystalMethAI            fuks browser</p>
-                <div class="scroll-indicator">↓</div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>DIS IS SAKSHAM</h1>
+            <p>Building scalable systems and elegant solutions</p>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects">
+        <div class="container">
+            <h2 class="section-title">PROJEKTS</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3>telegram and discord bots</h3>
+                    <p>the bots helped several servers and channels to grow substantially as it provides the direct search in whenever mentioned without loosing so much time , and energy</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">AWS</span>
+                        <span class="tech-tag">NodeJS , DiscordJS</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Kubernetes</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Real-time Analytics Engine</h3>
+                    <p>Built a distributed real-time analytics engine processing 5TB data daily.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Apache Kafka</span>
+                        <span class="tech-tag">Elasticsearch</span>
+                        <span class="tech-tag">Go</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Microservices Migration</h3>
+                    <p>Led the migration of a monolithic application to microservices architecture.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Docker</span>
+                        <span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>krom browser</h3>
+                    <p>the whololy different browser , which is specifically made for power users with their power and time in mind (projekt incomplete as lack of resources)</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">htmk , python parser knowledge</span>
+                        <span class="tech-tag">rust</span>
+                        <span class="tech-tag">C/C++</span>
+                        <span class="tech-tag">MongoDB(typical use)</span>
+                    </div>
+                </div>  
             </div>
-        </header>
+        </div>
+    </section>
 
-        <section class="projects">
-            <div class="project-card">
-                <h3 class="project-title">METH</h3>
-                <p class="project-description">Exploring cutting-edge AI technologies and their practical applications on darkweb and everywhere</p>
+    <!-- Skills Section -->
+    <section class="skills">
+        <div class="container">
+            <h2 class="section-title">Skill Set</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <ul class="skill-list">
+                        <li>deno</li>
+                        <li>Python</li>
+                        <li>Node.js</li>>
+                        <li>rust</li>
+                        <li>c/c++/C#</li
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Infrastructure</h3>
+                    <ul class="skill-list">
+                        <li>AWS</li>
+                        <li>Kubernetes</li>
+                        <li>Docker</li>
+                        <li>Terraform</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Databases</h3>
+                    <ul class="skill-list">
+                        <li>MongoDB</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <ul class="skill-list">
+                        <li>React</li>
+                        <li>Vue.js</li>
+                        <li>GraphQL</li>
+                    </ul>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="project-card">
-                <h3 class="project-title">FUKS Browser</h3>
-                <p class="project-description">Pushing the boundaries of what's possible in modern browsers</p>
+    <!-- Social Links -->
+    <section class="social">
+        <div class="container">
+            <h2 class="section-title">Connect</h2>
+            <div class="social-links">
+                <a href="https://twitter.com/saksham6068" class="social-link">Twitter</a>
+                <a href="https://github.com/sakshamred" class="social-link">GitHub</a>
             </div>
-
-            <div class="project-card">
-                <h3 class="project-title">Research & Insights</h3>
-                <p class="project-description">will share when I think it is worth sharing btw updates will be there on instagram and all socials i guess</p>
-            </div>
-        </section>
-    </div>
-
-    <div id="interaction-tips">
-        Move mouse to control particles | Click to create waves | Scroll to zoom
-    </div>
-
-    <script>
-        // Interactive background
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        // Create particles
-        const geometry = new THREE.BufferGeometry();
-        const vertices = [];
-        const velocities = [];
-        const particleCount = 1000;
-
-        for (let i = 0; i < particleCount; i++) {
-            vertices.push(
-                Math.random() * 2000 - 1000,
-                Math.random() * 2000 - 1000,
-                Math.random() * 2000 - 1000
-            );
-            velocities.push(
-                Math.random() * 2 - 1,
-                Math.random() * 2 - 1,
-                Math.random() * 2 - 1
-            );
-        }
-
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: 3,
-            color: 0x00ff87,
-            transparent: true,
-            opacity: 0.6
-        });
-
-        const particles = new THREE.Points(geometry, material);
-        scene.add(particles);
-
-        camera.position.z = 1000;
-
-        // Mouse interaction
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetX = 0;
-        let targetY = 0;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 2;
-            mouseY = (event.clientY - window.innerHeight / 2) * 2;
-        });
-
-        // Click interaction
-        document.addEventListener('click', (event) => {
-            const positions = particles.geometry.attributes.position.array;
-            const centerX = (event.clientX / window.innerWidth) * 2 - 1;
-            const centerY = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            for (let i = 0; i < positions.length; i += 3) {
-                velocities[i] += (Math.random() - 0.5) * 10;
-                velocities[i + 1] += (Math.random() - 0.5) * 10;
-                velocities[i + 2] += (Math.random() - 0.5) * 10;
-            }
-        });
-
-        // Scroll interaction
-        let targetZoom = 1000;
-        document.addEventListener('wheel', (event) => {
-            targetZoom = Math.max(500, Math.min(1500, targetZoom + event.deltaY * 0.5));
-        });
-
-        // Animation
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Smooth camera movement
-            targetX += (mouseX - targetX) * 0.05;
-            targetY += (mouseY - targetY) * 0.05;
-            camera.position.z += (targetZoom - camera.position.z) * 0.05;
-
-            // Update particle positions
-            const positions = particles.geometry.attributes.position.array;
-            for (let i = 0; i < positions.length; i += 3) {
-                // Apply velocity
-                positions[i] += velocities[i] * 0.1;
-                positions[i + 1] += velocities[i + 1] * 0.1;
-                positions[i + 2] += velocities[i + 2] * 0.1;
-
-                // Apply damping
-                velocities[i] *= 0.99;
-                velocities[i + 1] *= 0.99;
-                velocities[i + 2] *= 0.99;
-
-                // Keep particles within bounds
-                if (Math.abs(positions[i]) > 1000) {
-                    positions[i] *= -0.95;
-                    velocities[i] *= -0.95;
-                }
-                if (Math.abs(positions[i + 1]) > 1000) {
-                    positions[i + 1] *= -0.95;
-                    velocities[i + 1] *= -0.95;
-                }
-                if (Math.abs(positions[i + 2]) > 1000) {
-                    positions[i + 2] *= -0.95;
-                    velocities[i + 2] *= -0.95;
-                }
-            }
-            particles.geometry.attributes.position.needsUpdate = true;
-
-            // Rotate based on mouse position
-            particles.rotation.x += targetY * 0.00001;
-            particles.rotation.y += targetX * 0.00001;
-
-            renderer.render(scene, camera);
-        }
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Start animation
-        animate();
-
-        // Interactive cards
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const rotateY = ((x - rect.width / 2) / rect.width) * 10;
-                const rotateX = ((y - rect.height / 2) / rect.height) * -10;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateZ(0px)';
-            });
-        });
-    </script>
+        </div>
+    </section>
 </body>
 </html>
